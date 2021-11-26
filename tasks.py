@@ -46,7 +46,6 @@ def get_departments(webdriver: Selenium):
     webdriver.wait_until_element_is_visible('//div[@id="node-23"]//div[@id="agency-tiles-container"]')
     departments = webdriver.find_elements('//div[@id="agency-tiles-widget"]//span[@class="h4 w200"]')
     budgets = webdriver.find_elements('//div[@id="agency-tiles-widget"]//span[@class=" h1 w900"]')
-
     return {"departments": departments,
             "budgets": budgets}
 
