@@ -31,7 +31,6 @@ def rpa_parse_pdf_data(filename: str) -> dict:
 
 def get_departments(webdriver: Selenium):
     webdriver.open_headless_chrome_browser('https://itdashboard.gov/')
-    # webdriver.open_chrome_browser('https://itdashboard.gov/')
     webdriver.click_element("//a[@href='#home-dive-in']")
     webdriver.wait_until_element_is_visible('//div[@id="node-23"]//div[@id="agency-tiles-container"]')
     departments = webdriver.find_elements('//div[@id="agency-tiles-widget"]//span[@class="h4 w200"]')
