@@ -19,7 +19,7 @@ def rpa_parse_pdf_data(filename: str) -> dict:
     start = 'Name of this Investment: '
     sep = '2. Unique Investment Identifier (UII): '
     end = 'Section B:'
-    page_text = pdf.get_text_from_pdf(filename, 1)[1].replace("\n", "")
+    page_text = pdf.get_text_from_pdf(filename, 1)[1].replace("\n", " ")
     investment_name_index = page_text.find(start) + len(start)
     uii_index_start = page_text.find(sep)
     uii_index_end = uii_index_start + len(sep)
