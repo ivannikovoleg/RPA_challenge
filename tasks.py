@@ -67,19 +67,19 @@ def get_agencies_table(webdriver: Selenium, dep_to_scrap: str) -> list:
 
 def check_agencies(webdriver: Selenium):
     table_rows = webdriver.find_elements('//div[@id="investments-table-object_wrapper"]//tbody//tr')
-    for element in table_rows:
-        urls = element.find_elements_by_xpath('.//a')
+    for row in table_rows:
+        urls = row.find_elements_by_xpath('.//a')
         for url in urls:
             link = url.get_attribute('href')
             file_name = f"{link[link.rfind('/') + 1:]}.pdf"
             download_file(webdriver, link, file_name)
             values = rpa_parse_pdf_data(f'output/{file_name}')
             print(f"Check {values['uii']}: {values['investment']} in table.")
-            if (values['uii'] in element.text) and (values['investment'] in element.text):
+            if (values['uii'] in row.text) and (values['investment'] in row.text):
                 print('Table contains both values.')
-            elif (values['uii'] in element.text) and (values['investment'] not in element.text):
+            elif (values['uii'] in row.text) and (values['investment'] not in row.text):
                 print(f'Table contain only {values["uii"]}.')
-            elif (values['uii'] not in element.text) and (values['investment'] in element.text):
+            elif (values['uii'] not in row.text) and (values['investment'] in row.text):
                 print(f'Table contain only {values["investment"]}.')
             else:
                 print("Table doesn't contain values.")
