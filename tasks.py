@@ -48,7 +48,7 @@ def write_budgets(workbook: Files, departments, budgets):
     print('Departments budgets: Done!')
 
 
-def get_agencies_table_with_check(webdriver: Selenium, dep_to_scrap: str) -> list:
+def get_agencies_table(webdriver: Selenium, dep_to_scrap: str) -> list:
     webdriver.wait_until_element_is_visible(
         f"//div[@id='agency-tiles-widget']//span[contains(text(),'{dep_to_scrap}')]/..", timedelta(seconds=30))
     webdriver.click_element(f"//div[@id='agency-tiles-widget']//span[contains(text(),'{dep_to_scrap}')]/..")
@@ -125,7 +125,7 @@ def main():
     workbook.create_workbook('write_data', fmt='xlsx')
     values = get_departments(driver)
     write_budgets(workbook, values['departments'], values['budgets'])
-    table = get_agencies_table_with_check(driver, dep_to_scrap)
+    table = get_agencies_table(driver, dep_to_scrap)
     write_agencies(workbook, table)
     workbook.save_workbook('output/write_data.xlsx')
     workbook.close_workbook()
