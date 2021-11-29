@@ -72,7 +72,7 @@ def check_agencies(webdriver: Selenium):
         for url in urls:
             link = url.get_attribute('href')
             file_name = f"{link[link.rfind('/') + 1:]}.pdf"
-            download_file_single(webdriver, link, file_name)
+            download_file(webdriver, link, file_name)
             values = rpa_parse_pdf_data(f'output/{file_name}')
             print(f"Check {values['uii']}: {values['investment']} in table.")
             if (values['uii'] in element.text) and (values['investment'] in element.text):
@@ -99,7 +99,7 @@ def write_agencies(workbook: Files, table: list):
     print('Agencies: Done!')
 
 
-def download_file_single(webdriver: Selenium, link: str, filename: str):
+def download_file(webdriver: Selenium, link: str, filename: str):
     webdriver.execute_javascript(f'window.open("{link}")')
     webdriver.switch_window("NEW")
     webdriver.wait_until_element_is_visible(
