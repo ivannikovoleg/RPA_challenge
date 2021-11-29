@@ -48,7 +48,7 @@ def write_budgets(workbook: Files, departments, budgets):
     print('Departments budgets: Done!')
 
 
-def get_agencies_table(webdriver: Selenium, dep_to_scrap: str) -> list:
+def get_agencies_table_with_check(webdriver: Selenium, dep_to_scrap: str) -> list:
     webdriver.wait_until_element_is_visible(
         f"//div[@id='agency-tiles-widget']//span[contains(text(),'{dep_to_scrap}')]/..", timedelta(seconds=30))
     webdriver.click_element(f"//div[@id='agency-tiles-widget']//span[contains(text(),'{dep_to_scrap}')]/..")
@@ -59,6 +59,13 @@ def get_agencies_table(webdriver: Selenium, dep_to_scrap: str) -> list:
         "//a[@id='investments-table-object_last' and contains(@class, 'disabled')]",
         timedelta(seconds=30))
     print('Show all entries.')
+    check_agencies(webdriver)
+    table = [i.text for i in webdriver.find_elements('//div[@id="investments-table-object_wrapper"]//tbody//tr//td')
+             if i.text != '']
+    return table
+
+
+def check_agencies(webdriver: Selenium):
     table_rows = webdriver.find_elements('//div[@id="investments-table-object_wrapper"]//tbody//tr')
     for element in table_rows:
         urls = element.find_elements_by_xpath('.//a')
@@ -76,9 +83,6 @@ def get_agencies_table(webdriver: Selenium, dep_to_scrap: str) -> list:
                 print(f'Table contain only {values["investment"]}.')
             else:
                 print("Table doesn't contain values.")
-    table = [i.text for i in webdriver.find_elements('//div[@id="investments-table-object_wrapper"]//tbody//tr//td')
-             if i.text != '']
-    return table
 
 
 def write_agencies(workbook: Files, table: list):
@@ -121,7 +125,7 @@ def main():
     workbook.create_workbook('write_data', fmt='xlsx')
     values = get_departments(driver)
     write_budgets(workbook, values['departments'], values['budgets'])
-    table = get_agencies_table(driver, dep_to_scrap)
+    table = get_agencies_table_with_check(driver, dep_to_scrap)
     write_agencies(workbook, table)
     workbook.save_workbook('output/write_data.xlsx')
     workbook.close_workbook()
